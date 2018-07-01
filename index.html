@@ -1,46 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/moment.min.js"></script>
 
     <title>ICE-Geschwindigkeit</title>
-    <script>
-        $(function() {
-            $('#update').click(function() {
-                $.ajax({
-                    type: 'GET',
-                    // We can't call the API of ICE Portal directly due to CORS restrictions
-                    //  url: 'https://portal.imice.de/api1/rs/status',
-                    url: 'http://localhost:8000/ice-tacho.php',
-                    dataType: 'json',
-                    contentType: 'application/json; charset=utf-8',
-                    success: function(response) {
-                        $('#speed').html(response.speed);
-                        _date = new Date(response.serverTime);
-                        $('#time').html(_date.getDay() + '.' + _date.getMonth() + '.' + _date.getFullYear() + ' - ' + _date.getHours() + ':' + _date.getMinutes() + ':' + _date.getSeconds());
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-            });
-        });
-    </script>
 </head>
 <body>
-<div class="container">
+<div id="app" class="container">
     <div class="jumbotron">
         <div class="well">
-            <div class="h1"><span id="speed"></span> km/h</div>
-            <div class="">Zeit: <span id="time"></span></div>
-            <button class="btn btn-default" id="update">Aktualisieren</button>
+            <div class="h1"><span id="speed">{{ info.speed }}</span> km/h</div>
+            <div class="">Zeit: <span id="time">{{ info.serverTime | timestampToDate }}</span></div>
+            <button v-on:click="fetchData" class="btn btn-default">Aktualisieren</button>
         </div>
     </div>
+    <div><pre>
+        {{ info }}
+    </pre></div>
 </div>
+<script>
+    Vue.filter('timestampToDate', function(value) {
+        if (value) {
+            return moment.unix(value).format('DD.MM.YYYY HH:mm:ss');
+        }
+    });
+
+    const vm = new Vue({
+        el: '#app',
+        data () {
+            return {
+                info: {},
+                timer: ''
+            }
+        },
+        mounted () {
+            this.fetchData();
+            this.timer = setInterval(this.fetchData, 3000)
+        },
+        methods: {
+            fetchData: function () {
+                axios
+                    .get('http://localhost:1337/portal.imice.de/api1/rs/status')
+                    .then(response => (this.info = response.data))
+            }
+        },
+        beforeDestroy() {
+            clearInterval(this.timer)
+        },
+    });
+</script>
 </body>
 </html>

@@ -4,21 +4,26 @@
 
 This reads from the internal API of the ICE Portal and shows the speed big on a screen.
 
-## Why PHP?
+## Requirements
 
-Because of the strict CORS restrictions the data is not accessible from any page, including local files.
-Therefor there is a small PHP script to fetch the data and redistributes it on localhost.
- 
+* Git
+* npm
+* PHP (or any other webserver)
+* A browser, well
+
 ## How to start
 
-1. Fit the requirements: Git and PHP (>= 5.4) on your device  
-1. Clone this repository
+1. Fit the requirements: Git, npm and PHP (>= 5.4) on your device  
+1. Clone this repository, `cd` in it
+1. Run `npm install`
+1. Start the CORS proxy: `$ ./node_modules/corsproxy-https/bin/corsproxy`
 1. Start the internal PHP webserver within the cloned directory (`php -S localhost:8000`)
 1. Open the page on http://localhost:8000/ 
 
 ## Todo
 
-* Auto-fetching the values
+* Get rid of PHP, use a webserver from npm
+* Add npm script
 * Strip down css (Bootstrap is too much)
-* Strip down JS
-* Smart error messages
+* Add error messages
+* Use local resources to limit traffic
