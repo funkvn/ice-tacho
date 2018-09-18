@@ -2,10 +2,12 @@
 <html lang="de">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="css/pure-min.css">
+    <link rel="stylesheet" href="css/grids-responsive-min.css">
+    <link rel="stylesheet" href="css/custom.css">
+
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/moment.min.js"></script>
@@ -13,18 +15,37 @@
     <title>ICE-Geschwindigkeit</title>
 </head>
 <body>
-<div id="app" class="container">
-    <div class="jumbotron">
-        <div class="well">
-            <div class="h1"><span id="speed">{{ info.speed }}</span> km/h</div>
-            <div class="">Zeit: <span id="time">{{ info.serverTime | timestampToDate }}</span></div>
-            <button v-on:click="fetchData" class="btn btn-default">Aktualisieren</button>
+<div class="header pure-g">
+    <div class="pure-u-1-2">
+        <div class="home-menu pure-menu pure-menu-horizontal">
+            <a class="pure-menu-heading" href="">ICE-Tacho</a>
         </div>
     </div>
-    <div><pre>
-        {{ info }}
+    <div class="pure-u-1-2">
+        <div class="home-menu pure-menu pure-menu-horizontal">
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item"><a href="https://github.com/funkvn/ice-tacho" class="pure-menu-link">Projekt auf GitHub</a></li>
+                <li class="pure-menu-item"><a href="http://www.valentin-funk.de" class="pure-menu-link">Autor</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="app" class="splash-container">
+    <div class="splash">
+        <h1 class="splash-head"><span id="speed">{{ info.speed }}</span> km/h</h1>
+        <p class="splash-subhead">
+            <span id="time">{{ info.serverTime | timestampToDate }}</span> (Zeit der Serverantwort)
+        </p>
+        <p>
+            <button v-on:click="fetchData" class="pure-button pure-button-primary">Aktualisieren</button>
+        </p>
+    </div>
+
+    <div id="info-box"><pre>{{ info }}
     </pre></div>
 </div>
+
 <script>
     Vue.filter('timestampToDate', function(value) {
         if (value) {

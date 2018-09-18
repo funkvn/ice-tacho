@@ -23,7 +23,7 @@ This reads from the internal API of the ICE Portal and shows the speed big on a 
 ## Todo
 
 * Get rid of PHP, use a webserver from npm
-* Add npm script
-* Strip down css (Bootstrap is too much)
-* Add error messages
-* Use local resources to limit traffic
+* Add npm script to start the servers
+* Show error messages if something went wrong
+* Use build process to generate Vue.js from NPM and use local resources to limit traffic
+* Use Sass/Less to clean up CSS 
